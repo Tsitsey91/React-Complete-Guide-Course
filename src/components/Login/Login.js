@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 // import { useEffect } from 'react';
 
 import Card from '../UI/Card/Card';
@@ -18,14 +18,25 @@ const emailReducer = (state, action) => {
     // state snapshot in the 'state' input param.
     return { value: state.value, isValid: state.value.includes('@') }
   }
+  return { value: '', isValid: undefined }
+}
+
+const passwordReducer = (state, action) => {
+  if (action.type === 'USER_INPUT') {
+    return { value: action.val, isValid: action.val.trim().length > 6 }
+  }
+  if (action.type === 'INPUT_BLUR') {
+    return { value: state.value, isValid: state.value.trim().length > 6 }
+  }
   return { value: '', isValid: null }
 }
 
 const Login = (props) => {
+  // we handle the two below states using the Reducer !
   // const [enteredEmail, setEnteredEmail] = useState('');
   // const [emailIsValid, setEmailIsValid] = useState();
-  const [enteredPassword, setEnteredPassword] = useState('');
-  const [passwordIsValid, setPasswordIsValid] = useState();
+  // const [enteredPassword, setEnteredPassword] = useState('');
+  // const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
 
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
@@ -33,37 +44,84 @@ const Login = (props) => {
     isValid: false
   })
 
+  const [passwordState, dispacthPassword] = useReducer(passwordReducer, {
+    value: '', isValid: null
+  })
+
+  // object destructuring - we are pulling the isValid properties from the 
+  // objects and we are storing them into the emailIsValid & passwordIsValid
+  // variables. We doing that because checking form validity runs with every key
+  // stroke (too many times) because the useEffect depends and runs every
+  // time the emailState or passwordState change
+  // The advantage is that whenever just the value changes but not the validity
+  // then the useEffect will not run
+  const { isValid: emailIsValid } = emailState //to avoid unecessary exec of useEffect
+  const { isValid: passwordIsValid } = passwordState
+
+  useEffect(() => {
+    // see comment in passwordChangeHandler > setFormIsValid
+    // now this useEffect will run everytime that emailState or passwordState
+    // changes and will update the validity of the form accordingly BASED
+    // ON THE LATEST snapshots of the two inputs (email,pw)...hence this is
+    // the correct point to use the setFormIsValid and not inside the 'passwordChangeHandler'
+    // or 'emailChangeHandler'
+    const identifier = setTimeout(() => {
+      console.log('checking form validity-useEffect')
+      setFormIsValid(
+        emailIsValid && passwordIsValid
+      )
+    }, 500)
+
+    // CLEANUP function - it will run before every execution of the useEffect
+    // except for the 1st time. We will use it to clean the previous timer
+    // and set a new one
+    return () => {
+      console.log('CLEANUP-useEffect')
+      clearTimeout(identifier)
+    }
+
+  }, [emailIsValid, passwordIsValid]) // [emailState, passwordState]
+
   const emailChangeHandler = (event) => {
     // setEnteredEmail(event.target.value);
-    // this will trigger the  reducers function i.e. emailReducer
+    // calling dispatchEmail will trigger the reducers' function i.e. emailReducer
     // the below object will be the 'action' input param in emailReducer
     dispatchEmail({ type: 'USER_INPUT', val: event.target.value })
 
-    setFormIsValid(
-      event.target.value.includes('@') && enteredPassword.trim().length > 6
-    )
+    // setFormIsValid(
+    //   event.target.value.includes('@') && passwordState.isValid
+    // )
   };
 
   const passwordChangeHandler = (event) => {
-    setEnteredPassword(event.target.value);
+    // setEnteredPassword(event.target.value);
+    // dispacthPassword(action)--->passwordReducer(action)...just like in email
+    dispacthPassword({ type: 'USER_INPUT', val: event.target.value })
 
-    setFormIsValid(
-      emailState.isValid && event.target.value.trim().length > 6
-    )
+    // this is not optimal because we are updating the forms' state based on 
+    // another state(another variable i.e. emailState) and it is not guaranteed
+    // that the emailState will be the last state due to how React schedules
+    // state updates...we will comment it out and use the 'useEffect' above
+    // (see comment there)
+    // (the same applies also for the emailChangeHandler)
+    // setFormIsValid(
+    //   emailState.isValid && event.target.value.trim().length > 6
+    // )
   };
 
   const validateEmailHandler = () => {
-    // setEmailIsValid(emailState.isValid);
+    //INPUT_BLUR to signify that this runs when the input lost focus
+    // (i.e. the validateEmailHandler)...see the JSX code below
     dispatchEmail({ type: 'INPUT_BLUR' })
   };
 
   const validatePasswordHandler = () => {
-    setPasswordIsValid(enteredPassword.trim().length > 6);
+    dispacthPassword({ type: 'INPUT_BLUR' })
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, enteredPassword);
+    props.onLogin(emailState.value, passwordState.value);
   };
 
   return (
@@ -83,14 +141,14 @@ const Login = (props) => {
           />
         </div>
         <div
-          className={`${classes.control} ${passwordIsValid === false ? classes.invalid : ''
+          className={`${classes.control} ${passwordState.isValid === false ? classes.invalid : ''
             }`}
         >
           <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
-            value={enteredPassword}
+            value={passwordState.value}
             onChange={passwordChangeHandler}
             onBlur={validatePasswordHandler}
           />
