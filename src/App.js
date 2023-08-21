@@ -32,11 +32,15 @@ function App() {
   // child components of the provider will get the isLoggedIn state from 
   // context object.
   return (
+    //I dont pass the logoutHandler in the Home component using the context
+    // because there I use it directly?!? it's not just to forward it to 
+    // another component...
     <React.Fragment>
       <AuthContext.Provider value={{
-        isLoggedIn: isLoggedIn
+        isLoggedIn: isLoggedIn,
+        onLogout: logoutHandler
       }}>
-        <MainHeader onLogout={logoutHandler} />
+        <MainHeader />
         <main>
           {!isLoggedIn && <Login onLogin={loginHandler} />}
           {isLoggedIn && <Home onLogout={logoutHandler} />}
