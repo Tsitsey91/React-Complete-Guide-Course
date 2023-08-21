@@ -41,7 +41,7 @@ const Login = (props) => {
 
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
     value: '',
-    isValid: false
+    isValid: null
   })
 
   const [passwordState, dispacthPassword] = useReducer(passwordReducer, {
@@ -55,7 +55,7 @@ const Login = (props) => {
   // time the emailState or passwordState change
   // The advantage is that whenever just the value changes but not the validity
   // then the useEffect will not run
-  const { isValid: emailIsValid } = emailState //to avoid unecessary exec of useEffect
+  const { isValid: emailIsValid } = emailState //object destructuring-to avoid unecessary exec of useEffect
   const { isValid: passwordIsValid } = passwordState
 
   useEffect(() => {
