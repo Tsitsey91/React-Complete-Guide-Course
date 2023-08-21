@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 
 // it creates a 'context object'.
@@ -12,8 +12,49 @@ import React from "react";
 // achieve the same
 // Note: AuthContext is an object that will contain a component
 const AuthContext = React.createContext({
-    isLoggedIn:false
+    isLoggedIn: false,
+    onLogout: () => { }, //just for IDE autocompletion
+    onLogin: (email, password) => { }
 })
+
+export const AuthContextProvider = (props) => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        console.log('App > useEffect started!')
+        const storedUserLoggedInInfo = localStorage.getItem('isLoggedIn')
+        if (storedUserLoggedInInfo === '1') {
+            setIsLoggedIn(true)
+        }
+    }, [])
+
+    const loginHandler = (email, password) => {
+        // We should of course check email and password
+        // But it's just a dummy/ demo anyways
+        localStorage.setItem('isLoggedIn', '1')
+        setIsLoggedIn(true);
+    };
+
+    const logoutHandler = () => {
+        localStorage.removeItem('isLoggedIn')
+        setIsLoggedIn(false);
+    };
+
+    return (
+        // The isLoggedIn in our context obj updates based on the isLoggedIn from
+        // useState. Now we dont have to pass props to child components. All the 
+        // child components of the provider will get the isLoggedIn state from 
+        // context object.
+        <AuthContext.Provider
+            value={{
+                isLoggedIn: isLoggedIn,
+                onLogout: logoutHandler,
+                onLogin: loginHandler
+            }}>
+            {props.children}
+        </AuthContext.Provider>
+    )
+}
 
 export default AuthContext
 

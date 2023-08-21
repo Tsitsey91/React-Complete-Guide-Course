@@ -1,9 +1,10 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 // import { useEffect } from 'react';
 
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
+import AuthContext from '../../context/auth-context';
 
 const emailReducer = (state, action) => {
   if (action.type === 'USER_INPUT') {
@@ -48,6 +49,8 @@ const Login = (props) => {
     value: '', isValid: null
   })
 
+  const authCtx = useContext(AuthContext)
+
   // object destructuring - we are pulling the isValid properties from the 
   // objects and we are storing them into the emailIsValid & passwordIsValid
   // variables. We doing that because checking form validity runs with every key
@@ -65,6 +68,8 @@ const Login = (props) => {
     // ON THE LATEST snapshots of the two inputs (email,pw)...hence this is
     // the correct point to use the setFormIsValid and not inside the 'passwordChangeHandler'
     // or 'emailChangeHandler'
+    console.log('EFFECT RUNNING')
+
     const identifier = setTimeout(() => {
       console.log('checking form validity-useEffect')
       setFormIsValid(
@@ -121,7 +126,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, passwordState.value);
+    authCtx.onLogin(emailState.value, passwordState.value);
   };
 
   return (
