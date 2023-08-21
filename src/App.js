@@ -27,20 +27,20 @@ function App() {
     localStorage.removeItem('isLoggedIn')
     setIsLoggedIn(false);
   };
-// The isLoggedIn in our context obj updates based on the isLoggedIn from
-// useState. Now we dont have to pass props to child components. All the 
-// child components of the provider will get the isLoggedIn state from 
-// context object.
+  // The isLoggedIn in our context obj updates based on the isLoggedIn from
+  // useState. Now we dont have to pass props to child components. All the 
+  // child components of the provider will get the isLoggedIn state from 
+  // context object.
   return (
     <React.Fragment>
       <AuthContext.Provider value={{
         isLoggedIn: isLoggedIn
       }}>
-      <MainHeader onLogout={logoutHandler} />
-      <main>
-        {!isLoggedIn && <Login onLogin={loginHandler} />}
-        {isLoggedIn && <Home onLogout={logoutHandler} />}
-      </main>
+        <MainHeader onLogout={logoutHandler} />
+        <main>
+          {!isLoggedIn && <Login onLogin={loginHandler} />}
+          {isLoggedIn && <Home onLogout={logoutHandler} />}
+        </main>
       </AuthContext.Provider>
     </React.Fragment>
   );

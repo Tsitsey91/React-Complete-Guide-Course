@@ -1,36 +1,32 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import classes from './Navigation.module.css';
 import AuthContext from '../../context/auth-context';
 
 const Navigation = (props) => {
+
+  const authContextObject = useContext(AuthContext)
+
   return (
-  // The consumer takes a child
-  // which actually should be a function (between curly braces like this)
-  // and as argument, you'll get your Context data.
-    <AuthContext.Consumer>
-      {(authContextObject)=>{
-        return (<nav className={classes.nav}>
-          <ul>
-            {authContextObject.isLoggedIn && (
-              <li>
-                <a href="/">Users</a>
-              </li>
-            )}
-            {authContextObject.isLoggedIn && (
-              <li>
-                <a href="/">Admin</a>
-              </li>
-            )}
-            {authContextObject.isLoggedIn && (
-              <li>
-                <button onClick={props.onLogout}>Logout</button>
-              </li>
-            )}
-          </ul>
-        </nav>)
-      }}
-    </AuthContext.Consumer>
+    <nav className={classes.nav}>
+      <ul>
+        {authContextObject.isLoggedIn && (
+          <li>
+            <a href="/">Users</a>
+          </li>
+        )}
+        {authContextObject.isLoggedIn && (
+          <li>
+            <a href="/">Admin</a>
+          </li>
+        )}
+        {authContextObject.isLoggedIn && (
+          <li>
+            <button onClick={props.onLogout}>Logout</button>
+          </li>
+        )}
+      </ul>
+    </nav>
   );
 };
 
