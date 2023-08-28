@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
+import HomePage from './pages/Home';
+import Products from './pages/Products';
+import RootLayout from './pages/Root';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+//1st way
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <RootLayout />,
+    children: [
+      { path: '/', element: <HomePage /> },
+      { path: '/products', element: <Products /> }
+    ]
+  },
+])
+
+//alternative-old way of defining routes
+// const routeDefinitions = createRoutesFromElements(
+//   <Route>
+//     <Route path='/' element={<HomePage/>} />
+//     <Route path='/products' element={<Products/>} />
+//   </Route>
+// )
+// const router = createBrowserRouter(routeDefinitions)
+
+const App = () => {
+  return <div>
+    <RouterProvider router={router} />
+  </div>;
 }
 
 export default App;
