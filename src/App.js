@@ -32,7 +32,7 @@ function App() {
   async function handleMovieFetching2() {
     try {
       setMoviesLoading(true)
-      const response = await fetch('https://swapi.dev/api/filmsss/')
+      const response = await fetch('https://swapi.dev/api/filmxxs/')
       if (!response.ok) {
         throw Error(`Something went wrong...(response status:${response.status})`)
       }
@@ -53,16 +53,25 @@ function App() {
     setMoviesLoading(false)
   }
 
+  let content = <p>Found no movies.</p>
+
+  if (!moviesLoading && movies.length > 0) {
+    content = <MoviesList movies={movies} />
+  }
+  if (!moviesLoading && receivedError) {
+    content = <p>{receivedError}</p>
+  }
+  if (moviesLoading) {
+    content = <p>Loading movies for you ...</p>
+  }
+
   return (
     <React.Fragment>
       <section>
         <button onClick={handleMovieFetching2}>Fetch Movies</button>
       </section>
       <section>
-        {!moviesLoading && movies.length > 0 && <MoviesList movies={movies} />}
-        {!moviesLoading && movies.length === 0 && !receivedError && <p>Found no movies.</p>}
-        {!moviesLoading && receivedError && <p>{receivedError}</p>}
-        {moviesLoading && <p>Loading movies for you ...</p>}
+        {content}
       </section>
     </React.Fragment>
   );
