@@ -8,6 +8,7 @@ function App() {
   const [moviesLoading, setMoviesLoading] = useState(false)
 
   function handleMovieFetching() {
+    setMoviesLoading(true)
     fetch('https://swapi.dev/api/films')
       .then(
         response => {
@@ -23,6 +24,7 @@ function App() {
           }
         })
         setMovies(transformedMovies)
+        setMoviesLoading(false)
       })
   }
 
@@ -45,7 +47,7 @@ function App() {
   return (
     <React.Fragment>
       <section>
-        <button onClick={handleMovieFetching2}>Fetch Movies</button>
+        <button onClick={handleMovieFetching}>Fetch Movies</button>
       </section>
       <section>
         {!moviesLoading && movies.length > 0 && <MoviesList movies={movies} />}
