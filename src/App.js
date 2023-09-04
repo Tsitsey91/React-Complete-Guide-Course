@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Tasks from './components/Tasks/Tasks';
 import NewTask from './components/NewTask/NewTask';
@@ -7,33 +7,35 @@ import useHttp from './hooks/use-http';
 function App() {
   const [tasks, setTasks] = useState([]);
 
-  const prepareData = useCallback((data) => {
-    const loadedTasks = [];
 
-    for (const taskKey in data) {
-      loadedTasks.push({ id: taskKey, text: data[taskKey].text });
-    }
-    setTasks(loadedTasks)
-  }, [])
-
-  const urlToSend = useMemo(() => {
-    return {
-      url: 'https://react-http-testing-2f51c-default-rtdb.europe-west1.firebasedatabase.app/tasks.json'
-    }
-  }, [])
 
   // using our custom hook
-  const { isLoading, error, sendRequest: getTasks } = useHttp(
-    urlToSend,
-    prepareData
-  )
+  const { isLoading, error, sendRequest: getTasks } = useHttp()
 
   useEffect(() => {
-    getTasks();
+    // we dont need useCallback here because the func is not a external dependency
+    // to useEffect anymore, hence it will not cause an inf loop 
+    const prepareData = (data) => {
+      console.log('App.js-prepareData running')
+      const loadedTasks = [];
+
+      for (const taskKey in data) {
+        loadedTasks.push({ id: taskKey, text: data[taskKey].text });
+      }
+      setTasks(loadedTasks)
+    }
+
+
+    getTasks({
+      url: 'https://react-http-testing-2f51c-default-rtdb.europe-west1.firebasedatabase.app/tasks.json'
+    },
+      prepareData
+    );
   }, [getTasks]);
 
   const taskAddHandler = (task) => {
-    setTasks((prevTasks) => prevTasks.concat(task));
+    setTasks((prevTasks) => prevTasks.concat(task)
+    );
   };
 
   return (
