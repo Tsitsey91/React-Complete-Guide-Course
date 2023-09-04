@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 const useHttp = (requestConfig, applyData) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const sendRequest = async () => {
+    const sendRequest = useCallback(async () => {
         setIsLoading(true);
         setError(null);
         try {
+            console.log('sending request (custom hook)')
             const response = await fetch(
                 requestConfig.url,
                 {
@@ -31,7 +32,7 @@ const useHttp = (requestConfig, applyData) => {
             setError(err.message || 'Something went wrong!');
         }
         setIsLoading(false);
-    };
+    }, [requestConfig, applyData])
     // we need to return the 2 states and the 'sendRequest' function so 
     // that the component which uses the hook can call the function and also 
     // get access to the 2 states
