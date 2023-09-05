@@ -10,10 +10,19 @@ const SimpleInput = (props) => {
 
   const handleNameInputChange = event => {
     setEnteredName(event.target.value)
-    setEnteredNameTouched(true)
   }
   //2nd approach - with Ref and reading the value when we need it
   const nameInputRef = useRef()
+
+
+  const handleNameInputBlur = event => {
+    setEnteredNameTouched(true)
+
+    if (enteredName.trim() === '') {
+      setEnteredNameIsValid(false)
+      return
+    }
+  }
 
   const handleFormSubmission = event => {
     event.preventDefault()
@@ -49,6 +58,7 @@ const SimpleInput = (props) => {
           type='text'
           id='name'
           onChange={handleNameInputChange}
+          onBlur={handleNameInputBlur}
           value={enteredName} //binding value back to the state
         />
         {enteredNameIsInvalid &&
