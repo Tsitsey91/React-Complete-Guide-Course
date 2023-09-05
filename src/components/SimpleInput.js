@@ -11,25 +11,22 @@ const SimpleInput = (props) => {
   const enteredNameIsValid = enteredName.trim() !== ''
   const enteredNameIsInvalid = !enteredNameIsValid && enteredNameTouched
 
-  const enteredEmailIsEmpty = enteredEmail.trim() === ''
-  const enteredEmailIsContainsPapaki = enteredEmail.includes('@')
-  const enteredEmailIsValid = !enteredEmailIsEmpty
-    && enteredEmailIsContainsPapaki && enteredEmailTouched
+  const enteredEmailIsValid = enteredEmail.includes('@')
   const enteredEmailIsInvalid = !enteredEmailIsValid && enteredEmailTouched
 
-  const formIsValid = enteredNameIsValid
+  const formIsValid = enteredNameIsValid && enteredEmailIsValid
 
 
   const handleNameInputChange = event => {
     setEnteredName(event.target.value)
   }
 
-  const handleNameInputBlur = () => {
-    setEnteredNameTouched(true)
-  }
-
   const handleEmailInputChange = event => {
     setEnteredEmail(event.target.value)
+  }
+
+  const handleNameInputBlur = () => {
+    setEnteredNameTouched(true)
   }
 
   const handleEmailInputBlur = () => {
@@ -76,18 +73,16 @@ const SimpleInput = (props) => {
           <p className="error-text">Name must not be empty</p>}
       </div>
       <div className={emailInputClasses}>
-        <label htmlFor='name'>Your Email</label>
+        <label htmlFor='name'>Your E-mail</label>
         <input
-          type='text'
+          type='email'
           id='email'
           onChange={handleEmailInputChange}
           onBlur={handleEmailInputBlur}
           value={enteredEmail} //binding value back to the state
         />
-        {enteredEmailIsEmpty && enteredEmailTouched &&
-          <p className="error-text">Email must not be empty</p>}
-        {!enteredEmailIsContainsPapaki && !enteredEmailIsEmpty &&
-          <p className="error-text">Email must contain a '@'</p>}
+        {enteredEmailIsInvalid &&
+          <p className="error-text">Please enter a valid email</p>}
       </div>
       <div className="form-actions">
         <button disabled={!formIsValid}>Submit</button>
