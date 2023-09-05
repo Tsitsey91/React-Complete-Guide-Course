@@ -1,25 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 const SimpleInput = (props) => {
 
   // 1st approach - with on submit and state(getting the value on every change)
   const [enteredName, setEnteredName] = useState('')
   const [enteredNameTouched, setEnteredNameTouched] = useState(false)
-  const [formIsValid, setFormIsValid] = useState(false)
 
   const enteredNameIsValid = enteredName.trim() !== ''
   const enteredNameIsInvalid = !enteredNameIsValid && enteredNameTouched
+  const formIsValid = enteredNameIsValid
 
-  // to be used in a more general case.
-  // General Logic: Whenever one of our inputs is invalid we set the
-  //  form validity to false
-  useEffect(() => {
-    if (enteredNameIsValid) {
-      setFormIsValid(true)
-    } else {
-      setFormIsValid(false)
-    }
-  }, [enteredNameIsValid])
+
 
   const handleNameInputChange = event => {
     setEnteredName(event.target.value)
