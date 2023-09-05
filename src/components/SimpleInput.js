@@ -10,9 +10,11 @@ const SimpleInput = (props) => {
 
   const handleNameInputChange = event => {
     setEnteredName(event.target.value)
+
+    if (event.target.value.trim() !== '') {
+      setEnteredNameIsValid(true)
+    }
   }
-  //2nd approach - with Ref and reading the value when we need it
-  const nameInputRef = useRef()
 
 
   const handleNameInputBlur = event => {
@@ -20,7 +22,6 @@ const SimpleInput = (props) => {
 
     if (enteredName.trim() === '') {
       setEnteredNameIsValid(false)
-      return
     }
   }
 
@@ -35,8 +36,6 @@ const SimpleInput = (props) => {
 
     setEnteredNameIsValid(true)
     console.log('using state: ' + enteredName) //1st approach
-    const enteredName2 = nameInputRef.current.value // 2nd approach
-    console.log('using Ref: ' + enteredName2)
 
     setEnteredName('')
   }
@@ -54,7 +53,6 @@ const SimpleInput = (props) => {
       <div className={nameInputClasses}>
         <label htmlFor='name'>Your Name</label>
         <input
-          ref={nameInputRef}
           type='text'
           id='name'
           onChange={handleNameInputChange}
