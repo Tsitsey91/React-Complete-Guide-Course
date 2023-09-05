@@ -5,11 +5,19 @@ const SimpleInput = (props) => {
   // 1st approach - with on submit and state(getting the value on every change)
   const [enteredName, setEnteredName] = useState('')
   const [enteredNameTouched, setEnteredNameTouched] = useState(false)
+  const [enteredEmail, setEnteredEmail] = useState('')
+  const [enteredEmailTouched, setEnteredEmailTouched] = useState(false)
 
   const enteredNameIsValid = enteredName.trim() !== ''
   const enteredNameIsInvalid = !enteredNameIsValid && enteredNameTouched
-  const formIsValid = enteredNameIsValid
 
+  const enteredEmailIsEmpty = enteredEmail.trim() === ''
+  const enteredEmailIsContainsPapaki = enteredEmail.includes('@')
+  const enteredEmailIsValid = !enteredEmailIsEmpty
+    && enteredEmailIsContainsPapaki && enteredEmailTouched
+  const enteredEmailIsInvalid = !enteredEmailIsValid && enteredEmailTouched
+
+  const formIsValid = enteredNameIsValid
 
 
   const handleNameInputChange = event => {
@@ -20,11 +28,20 @@ const SimpleInput = (props) => {
     setEnteredNameTouched(true)
   }
 
+  const handleEmailInputChange = event => {
+    setEnteredEmail(event.target.value)
+  }
+
+  const handleEmailInputBlur = () => {
+    setEnteredEmailTouched(true)
+  }
+
   const handleFormSubmission = event => {
     event.preventDefault()
     setEnteredNameTouched(true)
+    setEnteredEmailTouched(true)
 
-    if (!enteredNameIsValid) {
+    if (!enteredNameIsValid || !enteredEmailIsValid) {
       return
     }
     console.log('using state: ' + enteredName) //1st approach
@@ -32,6 +49,8 @@ const SimpleInput = (props) => {
     // we reset the states once the form is submitted
     setEnteredName('')
     setEnteredNameTouched(false)
+    setEnteredEmail('')
+    setEnteredEmailTouched(false)
   }
 
   //NOTE: if you want instant validation go with state. If you only want to validate
@@ -40,6 +59,7 @@ const SimpleInput = (props) => {
 
 
   const nameInputClasses = enteredNameIsInvalid ? 'form-control invalid' : 'form-control'
+  const emailInputClasses = enteredEmailIsInvalid ? 'form-control invalid' : 'form-control'
 
   return (
     <form onSubmit={handleFormSubmission}>
@@ -54,6 +74,20 @@ const SimpleInput = (props) => {
         />
         {enteredNameIsInvalid &&
           <p className="error-text">Name must not be empty</p>}
+      </div>
+      <div className={emailInputClasses}>
+        <label htmlFor='name'>Your Email</label>
+        <input
+          type='text'
+          id='email'
+          onChange={handleEmailInputChange}
+          onBlur={handleEmailInputBlur}
+          value={enteredEmail} //binding value back to the state
+        />
+        {enteredEmailIsEmpty && enteredEmailTouched &&
+          <p className="error-text">Email must not be empty</p>}
+        {!enteredEmailIsContainsPapaki && !enteredEmailIsEmpty &&
+          <p className="error-text">Email must contain a '@'</p>}
       </div>
       <div className="form-actions">
         <button disabled={!formIsValid}>Submit</button>
