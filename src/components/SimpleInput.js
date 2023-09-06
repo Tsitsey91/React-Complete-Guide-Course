@@ -1,42 +1,32 @@
 import { useState } from "react";
+import useInput from "../hooks/use-input";
 
 const SimpleInput = (props) => {
 
-  // 1st approach - with on submit and state(getting the value on every change)
-  const [enteredName, setEnteredName] = useState('')
-  const [enteredNameTouched, setEnteredNameTouched] = useState(false)
-  const [enteredEmail, setEnteredEmail] = useState('')
-  const [enteredEmailTouched, setEnteredEmailTouched] = useState(false)
+  const {
+    value: enteredName,
+    isValid: enteredNameIsValid,
+    hasError: enteredNameIsInvalid,
+    handleValueInputChange: handleNameInputChange,
+    handleValueInputBlur: handleNameInputBlur,
+    reset: resetNameInput
+  } = useInput(name => name.trim() !== '')
 
-  const enteredNameIsValid = enteredName.trim() !== ''
-  const enteredNameIsInvalid = !enteredNameIsValid && enteredNameTouched
+  const {
+    value: enteredEmail,
+    isValid: enteredEmailIsValid,
+    hasError: enteredEmailIsInvalid,
+    handleValueInputChange: handleEmailInputChange,
+    handleValueInputBlur: handleEmailInputBlur,
+    reset: resetEmailInput
+  } = useInput(email => email.includes('@'))
 
-  const enteredEmailIsValid = enteredEmail.includes('@')
-  const enteredEmailIsInvalid = !enteredEmailIsValid && enteredEmailTouched
 
   const formIsValid = enteredNameIsValid && enteredEmailIsValid
 
 
-  const handleNameInputChange = event => {
-    setEnteredName(event.target.value)
-  }
-
-  const handleEmailInputChange = event => {
-    setEnteredEmail(event.target.value)
-  }
-
-  const handleNameInputBlur = () => {
-    setEnteredNameTouched(true)
-  }
-
-  const handleEmailInputBlur = () => {
-    setEnteredEmailTouched(true)
-  }
-
   const handleFormSubmission = event => {
     event.preventDefault()
-    setEnteredNameTouched(true)
-    setEnteredEmailTouched(true)
 
     if (!enteredNameIsValid || !enteredEmailIsValid) {
       return
@@ -44,10 +34,8 @@ const SimpleInput = (props) => {
     console.log('using state: ' + enteredName) //1st approach
 
     // we reset the states once the form is submitted
-    setEnteredName('')
-    setEnteredNameTouched(false)
-    setEnteredEmail('')
-    setEnteredEmailTouched(false)
+    resetNameInput()
+    resetEmailInput('')
   }
 
   //NOTE: if you want instant validation go with state. If you only want to validate
