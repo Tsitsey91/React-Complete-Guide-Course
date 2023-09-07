@@ -29,27 +29,30 @@ const BasicForm = (props) => {
     reset: resetEmail
   } = useInput(value => value.includes('@'))
 
+  const formIsValid = firstNameIsValid && lastNameIsValid && emailIsValid
 
   const handleFormSubmission = (event) => {
     event.preventDefault()
 
-    if (!firstNameIsValid || !lastNameIsValid || !emailIsValid) {
+    if (!formIsValid) {
       return
     }
+
+    console.log('Submitted')
+    console.log(firstName, lastName, email)
 
     resetFirstName()
     resetLastName()
     resetEmail()
   }
 
-  const formIsValid = firstNameIsValid && lastNameIsValid && emailIsValid
 
   const classesFirstName = firstNameIsInvalid ? 'form-control invalid' : 'form-control'
   const classesLastName = lastNameIsInvalid ? 'form-control invalid' : 'form-control'
   const classesEmail = emailIsInvalid ? 'form-control invalid' : 'form-control'
 
   return (
-    <form>
+    <form onSubmit={handleFormSubmission}>
       <div className='control-group'>
         <div className={classesFirstName}>
           <label htmlFor='name'>First Name</label>
@@ -83,10 +86,10 @@ const BasicForm = (props) => {
           onBlur={handleEmailInputBlur}
           value={email}
         />
-        {emailIsInvalid && <p className="error-text">Last name should not be empty</p>}
+        {emailIsInvalid && <p className="error-text">Email is not valid</p>}
       </div>
       <div className='form-actions'>
-        <button disabled={!formIsValid} onClick={handleFormSubmission}>Submit</button>
+        <button disabled={!formIsValid}>Submit</button>
       </div>
     </form>
   );
