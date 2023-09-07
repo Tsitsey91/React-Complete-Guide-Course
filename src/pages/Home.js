@@ -9,8 +9,9 @@ function HomePage() {
     return (
         <div>
             <h1>My HomePage</h1>
-            <p>Go to
-                <Link to='/products'>the products route/page</Link>
+            <p>Go to the
+                <Link to='/products'>products</Link>
+                route/page
             </p>
         </div>
     )
