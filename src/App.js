@@ -3,6 +3,7 @@ import HomePage from './pages/Home';
 import Products from './pages/Products';
 import RootLayout from './pages/Root';
 import ErrorPage from './pages/Error';
+import ProductDetails from './pages/ProductDetails';
 
 //1st way
 const router = createBrowserRouter([
@@ -13,7 +14,8 @@ const router = createBrowserRouter([
     // so that RootLayout acts as a wrapper of the below components
     children: [
       { path: '/', element: <HomePage /> },
-      { path: '/products', element: <Products /> }
+      { path: '/products', element: <Products /> },
+      { path: '/products/:productID', element: <ProductDetails /> } //dynamic path
     ],
     errorElement: <ErrorPage />
   },
