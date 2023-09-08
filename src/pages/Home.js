@@ -14,14 +14,14 @@ function HomePage() {
     // to use Links
     const navigate = useNavigate()
     const navigateToProducts = () => {
-        navigate('/products')
+        navigate('products')
     }
 
     return (
         <div>
             <h1>My HomePage</h1>
             <p>Go to the
-                <Link to='/products'>products</Link>
+                <Link to='products'>products</Link>
                 route/page
             </p>
             <p>
