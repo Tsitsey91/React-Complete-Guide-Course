@@ -13,7 +13,8 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     // so that RootLayout acts as a wrapper of the below components
     children: [
-      { path: '', element: <HomePage /> },
+      // { path: '', element: <HomePage /> },
+      { index: true, element: <HomePage /> }, // alternative
       { path: 'products', element: <Products /> },
       { path: 'products/:productID', element: <ProductDetails /> } //dynamic path
     ],
