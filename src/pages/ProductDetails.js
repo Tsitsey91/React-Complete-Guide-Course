@@ -16,7 +16,7 @@ const ProductDetails = () => {
 
     return <>
         <h1>product details...</h1>
-        <p>{params.productID}</p>
+        <p>ID = {params.productID}</p>
     </>
 }
 
