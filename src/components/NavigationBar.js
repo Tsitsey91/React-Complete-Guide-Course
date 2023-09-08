@@ -9,7 +9,7 @@ function NavigationBar() {
                 <ul className={classes.list}>
                     <li>
                         <NavLink
-                            to='/'
+                            to=''
                             className={({ isActive }) =>
                                 isActive ? classes.active : undefined}
                             end>
@@ -17,7 +17,7 @@ function NavigationBar() {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to='/products'
+                        <NavLink to='products'
                             className={({ isActive }) =>
                                 isActive ? classes.active : undefined}
                             end>
