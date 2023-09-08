@@ -2,7 +2,7 @@
 // here we want to know from the dynamic url which product 
 // was selected so that we can fetch the corresponding data
 
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 
 // from our backend
 const ProductDetails = () => {
@@ -17,6 +17,7 @@ const ProductDetails = () => {
     return <>
         <h1>product details...</h1>
         <p>ID = {params.productID}</p>
+        <button><Link to='..' relative="path">Back</Link></button>
     </>
 }
 
