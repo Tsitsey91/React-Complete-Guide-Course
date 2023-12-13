@@ -7,8 +7,8 @@ const initialState = { counter: 0, showCounter: true }
 
 // we create a slice(a subset) of our global state(we can create many 
 // slices in different files)
-createSlice({
-    name: 'counterSlice',
+const counterSlice = createSlice({
+    name: 'counter-slice',
     initialState: initialState,
     // the reduces below are equiv to the "counterReducer" below but they use redux-toolkit(less boilerplate)
     reducers: {
@@ -27,37 +27,9 @@ createSlice({
     }
 })
 
-const counterReducer = (currentState = initialState, action) => {
-    // NEVER MUTATE THE EXISTING STATE-IT COULD LEAD TO UNPREDICTABLE BUGS
-    // I.E. NEVER DO SOMETHING LIKE currentState.counter++ and then return it
-    if (action.type === 'increment') {
-        return {
-            counter: currentState.counter + 1,
-            showCounter: true
-        }
-    }
-    if (action.type === 'decrement') {
-        return {
-            counter: currentState.counter - 1,
-            showCounter: true
-        }
-    }
-    if (action.type === 'increase') {
-        return {
-            counter: currentState.counter + action.amount,
-            showCounter: true
-        }
-    }
-    if (action.type === 'toggleCounter') {
-        return {
-            counter: currentState.counter,
-            showCounter: !currentState.showCounter
-        }
-    }
-    return currentState
-}
 
-const store = createStore(counterReducer)
+// to get access to the reducer FOR WHEN HAVE ONLY ONE createSlice !!!
+const store = createStore(counterSlice.reducer)
 // we export the store so that we can dispatch actions 
 // from the components of our React app...We connect our app 
 // with the store from redux
