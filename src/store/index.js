@@ -8,7 +8,7 @@ const initialState = { counter: 0, showCounter: true }
 // we create a slice(a subset) of our global state(we can create many 
 // slices in different files)
 const counterSlice = createSlice({
-    name: 'counter-slice',
+    name: 'counter',
     initialState: initialState,
     // the reduces below are equiv to the "counterReducer" below but they use redux-toolkit(less boilerplate)
     reducers: {
@@ -19,7 +19,7 @@ const counterSlice = createSlice({
             state.counter--
         },
         increase(state, action) {
-            state.counter = state.counter + action.amount
+            state.counter = state.counter + action.payload
         },
         toggleCounter(state) {
             state.showCounter = !state.showCounter
@@ -38,6 +38,8 @@ const store = configureStore({
 //     reducer: {slice1.reducer, slice2.reducer}
 // })
 
+// we export the actions so that we can dispatch actions from other components
+export const counterActions = counterSlice.actions
 // we export the store so that we can dispatch actions 
 // from the components of our React app...We connect our app 
 // with the store from redux
