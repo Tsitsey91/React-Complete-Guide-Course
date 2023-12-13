@@ -1,7 +1,7 @@
 // Create a store. Create a reducer for the counter
 
 import { createStore } from "redux"
-import { createSlice } from "@reduxjs/toolkit"
+import { configureStore, createSlice } from "@reduxjs/toolkit"
 
 const initialState = { counter: 0, showCounter: true }
 
@@ -28,8 +28,16 @@ const counterSlice = createSlice({
 })
 
 
-// to get access to the reducer FOR WHEN HAVE ONLY ONE createSlice !!!
-const store = createStore(counterSlice.reducer)
+// to get access to the reducer for when we have many createSlice's !!!
+const store = configureStore({
+    reducer: counterSlice.reducer
+})
+// This is THE MOST GENERAL for when we have multiple slices(e.g. multiple reducers)
+// the above is just because in our small app we only have 1 createSlice(for now)
+// const store = configureStore({
+//     reducer: {slice1.reducer, slice2.reducer}
+// })
+
 // we export the store so that we can dispatch actions 
 // from the components of our React app...We connect our app 
 // with the store from redux
